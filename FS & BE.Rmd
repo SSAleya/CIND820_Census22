@@ -1,0 +1,71 @@
+---
+title: "Forward Feature Selection"
+author: "Syeda Aleya"
+date: "15/10/2022"
+output: html_document
+---
+
+```{r}
+install.packages('FNN')
+install.packages('RCurl')
+install.packages('MASS')
+install.packages('leaps')
+library(MASS) # stepwise regression
+library(leaps) # all subsets regression
+
+```
+
+
+
+```{r}
+Census22_40 <- read.csv("C:/Users/sania/Data analytics/Course materials 820/Latest census/Initial Data analysis/Census22_40.csv")
+```
+
+
+
+```{r}
+full <- lm(Income~.,data=Census22_40)
+null <- lm(Income~1,data=Census22_40)
+stepF <- stepAIC(null, scope=list(lower=null, upper=full),
+direction= "forward", trace=TRUE)
+summary(stepF)
+
+```
+
+
+```{r}
+full <- lm(Income~.,data=Census22_40)
+stepB <- stepAIC(full, direction= "backward", trace=TRUE)
+summary(stepB)
+
+```
+
+
+
+```{r}
+
+Income ~ OED_TYP1 + OED_TYP2 + PEHSPNON + PENATVTY + PEMNTVTY + 
+    PRDTRACE + PEMLR + PRDISFLG + A_SEX + A_ENRLW + A_MARITL + 
+    A_HGA + A_AGE + A_MJIND + A_MJOCC + ERN_OTR + CAP_VAL + DIV_VAL + 
+    FILESTAT + STATETAX_A + A_CLSWKR + PRUNTYPE + A_WKSTAT + 
+    PARENT + HHDFMX + HHDREL + MIGSAME + WKSWORK + VET_YN + FRMOTR + 
+    A_UNMEM + NOEMP
+```
+
+```{r}
+# Removing "MIFSAME" since cofficient is not significant
+# Adding the target variable
+
+Census22_32 <- subset(Census22_40, select=c(OED_TYP1, OED_TYP2, PEHSPNON, PENATVTY, PEMNTVTY, PRDTRACE, PEMLR, PRDISFLG, A_SEX, A_ENRLW, A_MARITL, A_HGA, A_AGE, A_MJIND, A_MJOCC, ERN_OTR, CAP_VAL, DIV_VAL, FILESTAT, STATETAX_A, A_CLSWKR, PRUNTYPE, A_WKSTAT, PARENT, HHDFMX, HHDREL, WKSWORK, VET_YN, FRMOTR, A_UNMEM, NOEMP, Income))
+
+```
+
+
+```{r}
+write.csv(Census22_32, "C:/Users/sania/Data analytics/Course materials 820/Latest census/Initial Data analysis/FS & BE/Census22_32.csv")
+```
+
+
+
+
+```
