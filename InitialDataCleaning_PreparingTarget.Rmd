@@ -1,0 +1,60 @@
+---
+title: "Initial Data Cleaning"
+author: "Syeda Aleya"
+date: "14/10/2022"
+output: html_document
+---
+
+```{r}
+Census22_40 <- read.csv("C:/Users/sania/Data analytics/Course materials 820/Latest census/Data collection/census22_initial.csv")
+
+```
+
+
+
+```{r cars}
+### Subset of Age=0[Not in Universe]
+
+df1<-subset(Census22_40, PTOTVAL =="0")
+
+```
+
+```{r}
+### Removing NiU
+
+Census22_40<-subset(Census22_40, PTOTVAL >"0")
+
+```
+
+
+
+```{r}
+# Creating Quartiles of income
+
+#install.packages("gtools")
+library(gtools)
+QR<- quantcut(Census22_40$PTOTVAL, q=5, na.rm = TRUE)
+table(QR)
+
+```
+
+```{r}
+
+### 5 levels of income from quartiles
+### Preparing target variable “Income”—
+#   taking 5 quantiles and labelling them "1", "2", "3", "4", "5" 
+#   1= Low, 2= LowerMiddle, 3= Middle, 4= LowerHigh, 5= High
+ 
+Income_levels <- c(1, 2, 3, 4, 5)
+Census22_40$Income  <- factor(QR, labels=Income_levels)
+Census22_40 <- subset(Census22_40, select = -c(PTOTVAL))
+```
+
+
+```{r}
+write.csv(Census22_40, "C:/Users/sania/Data analytics/Course materials 820/Latest census/Initial Data analysis/Preparing Target Variable/Census22_40.csv")
+
+```
+
+
+```
