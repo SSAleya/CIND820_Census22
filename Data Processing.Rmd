@@ -1,0 +1,222 @@
+---
+title: "Data Processing"
+author: "Syeda Aleya"
+date: "27/09/2022"
+output: html_document
+---
+
+```{r}
+
+### Using 40 Attributes
+census22_initial <- read.csv("C:/Users/sania/Data analytics/Course materials 820/Latest census/Data collection/census22_initial.csv")
+
+
+```
+
+```{r}
+str(census22)
+
+```
+
+
+```{r}
+### Subset of Age=0[Not in Universe]
+
+df1<-subset(census22_initial, PTOTVAL =="0")
+
+```
+
+
+```{r}
+
+
+### Removing NiU
+
+Census22_40row<-subset(census22_initial, PTOTVAL >"0")
+head(Census22_40row)
+
+```
+
+
+
+
+```{r}
+# Creating Quartiles of income
+
+#install.packages("gtools")
+library(gtools)
+
+```
+
+```{r}
+### 2 levels of income from quartiles
+
+Census_2q <- Census22_40row
+
+QR<- quantcut(Census_2q$PTOTVAL, q=2, na.rm = TRUE)
+table(QR)
+Income_levels <- c("Low","High")
+Census_2q$Income  <- factor(QR, labels=Income_levels)
+Census22_2QT <- subset(Census_2q, select = -c(PTOTVAL))
+
+```
+
+
+```{r}
+
+### 3 levels of income from quartiles
+
+Census_3q <- Census22_40row
+
+QR<- quantcut(Census_3q$PTOTVAL, q=3, na.rm = TRUE)
+table(QR)
+Income_levels <- c("Low","Medium","High")
+Census_3q$Income  <- factor(QR, labels=Income_levels)
+Census22_3QT <- subset(Census_3q, select = -c(PTOTVAL))
+```
+
+```{r}
+
+### 5 levels of income from quartiles
+
+Census_5q <- Census22_40row
+
+QR<- quantcut(Census22_40row$PTOTVAL, q=5, na.rm = TRUE)
+table(QR)
+Income_levels <- c("Low","LowerMedium", "Medium","LowerHigh","High")
+
+
+Census_5q$Income  <- factor(QR, labels=Income_levels)
+Census22_5QT <- subset(Census_5q, select = -c(PTOTVAL))
+
+
+```
+
+```{r}
+
+
+```
+
+```{r}
+
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+### 5 levels of income from quartiles
+#Income_levels <- c("Low","LowMediun", Medium", "LowHigh","High") 
+Income_levels <- c("Low","Medium", "High")
+Census22_ptotPositive$Income  <- factor(QR, labels=Income_levels)
+Census22_3QT <- subset(Census22_ptotPositive, select = -c(PTOTVAL))
+```
+
+
+
+```{r}
+write.csv(Census22_3QT, "C:/Users/sania/Data analytics/Course materials 820/Latest census/Census22_3QT.csv")
+
+```
+
+
+
+
+```{r}
+
+### Forward selection
+#install.packages("nnet")
+library(nnet)
+
+#define intercept-only model
+intercept_only <- multinom(Income ~ 1, data=Census22_37)
+
+#define model with all predictors
+all <- multinom(Income ~ ., data=Census22_37)
+
+#perform forward stepwise regression
+forward <- step(intercept_only, direction='forward', scope=formula(all), trace=0)
+
+#view results of forward stepwise regression
+forward$anova
+
+#view final model
+forward$coefficients
+```
+
+```{r}
+
+summary(forward)
+
+```
+
+
+```{r}
+### Backward elimination
+
+all <- multinom(Income ~ ., data=Census22)
+backward <- step(all, direction = "backward", trace=FALSE ) 
+
+#view results of backward stepwise regression
+backward$anova
+
+#view final model
+backward$coefficients
+```
+
+
+```{r}
+
+summary(backward)
+```
+
+
+```{r}
+### Both
+
+all <- multinom(Income ~ ., data=Census22)
+both <- step(intercept_only, direction='both', scope=formula(all), trace=0)
+
+#view results of forward stepwise regression
+both$anova
+
+#view final model
+both$coefficients
+
+```
+
+
+````{r}
+summary(both)
+
+```
+
+```{r}
+table(Census22$Income)
+
+```
+
+
+```{r}
+
+### Creating Systematic samples
+
+#set.seed(12345) # we will all get the same random samples by setting a seed
+
+get_sys <- function(N,n){
+  k = ceiling(N/n) # sampling interval
+  r = sample(1:k, 1) # random starting point
+  seq(r, r + k*(n-1), k) #  this gives you a vector of the indices to select
+}
+
+sys_sample2 <- Census22[get_sys(nrow(Census22), 1058), ]
+
+#summary(sys_sample1)
+
+```
+
