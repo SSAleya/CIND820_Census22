@@ -6,7 +6,7 @@
 
 # Read data
 import pandas as pd
-df =pd.read_csv (r'C:\Users\sania\Data analytics\Course materials 820\Latest census\Initial Data analysis\Preparing Target Variable\Census22_2QT.csv')
+df =pd.read_csv (r'C:\Users\sania\Data analytics\Course materials 820\Latest census\Initial Data analysis\Preparing Target Variable\Census22_3QT.csv')
 
 
 # In[2]:
@@ -110,7 +110,7 @@ from sklearn import metrics
 print(classification_report(y_test, y_pred))
 
 
-# In[14]:
+# In[12]:
 
 
 ### KNN
@@ -122,7 +122,7 @@ knn_clf.fit(X_train, np.squeeze(y_train))
 knn_clf.score(X_test, y_test)
 
 
-# In[15]:
+# In[13]:
 
 
 y_pred = knn_clf.predict(X_test)
@@ -131,7 +131,7 @@ from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test, y_pred)
 
 
-# In[16]:
+# In[14]:
 
 
 from sklearn.metrics import classification_report
@@ -140,7 +140,7 @@ from sklearn import metrics
 print(classification_report(y_test, y_pred))
 
 
-# In[17]:
+# In[15]:
 
 
 # Normalizing data
@@ -156,7 +156,7 @@ d_X_test = scaler.fit_transform(X_test)
 scaled_X_test = pd.DataFrame(d_X_test)
 
 
-# In[23]:
+# In[16]:
 
 
 ### Multinomial logistic regression 
@@ -166,13 +166,13 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 
 # Train multinomial logistic regression model
-lr = LogisticRegression(C=1.0, solver='lbfgs', max_iter = 1000)
+mul_lr = LogisticRegression(multi_class='multinomial', C=1.0, solver='lbfgs', max_iter = 1000)
 
-lr.fit(scaled_X_train, np.squeeze(y_train))
-lr.score(scaled_X_test, y_test)
+mul_lr.fit(scaled_X_train, np.squeeze(y_train))
+mul_lr.score(scaled_X_test, y_test)
 
 
-# In[24]:
+# In[17]:
 
 
 y_pred = mul_lr.predict(scaled_X_test)
@@ -181,7 +181,7 @@ from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test, y_pred)
 
 
-# In[25]:
+# In[18]:
 
 
 from sklearn.metrics import classification_report
@@ -190,7 +190,7 @@ from sklearn import metrics
 print(classification_report(y_test, y_pred))
 
 
-# In[26]:
+# In[19]:
 
 
 # 2. Repeated K-Fold Cross-Validation
@@ -208,7 +208,7 @@ from sklearn.model_selection import cross_val_score
 cv = RepeatedKFold(n_splits=10, n_repeats=5, random_state=1)
 
 
-# In[27]:
+# In[20]:
 
 
 ### Decision tree
@@ -230,7 +230,7 @@ print('Precision : %.3f (%.3f)' % (mean(scores2), std(scores2)))
 print('Recall : %.3f (%.3f)' % (mean(scores3), std(scores3)))
 
 
-# In[28]:
+# In[21]:
 
 
 ### Random Forest
@@ -253,7 +253,7 @@ print('Precision : %.3f (%.3f)' % (mean(scores2), std(scores2)))
 print('Recall : %.3f (%.3f)' % (mean(scores3), std(scores3)))
 
 
-# In[29]:
+# In[22]:
 
 
 ### LogisticRegression
@@ -261,7 +261,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 
-model = LogisticRegression(C=1.0, solver='lbfgs', max_iter = 1000)
+model = LogisticRegression(multi_class='multinomial', C=1.0, solver='lbfgs', max_iter = 1000)
 
 # evaluate model
 scores = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
@@ -276,7 +276,7 @@ print('Precision : %.3f (%.3f)' % (mean(scores2), std(scores2)))
 print('Recall : %.3f (%.3f)' % (mean(scores3), std(scores3)))
 
 
-# In[30]:
+# In[23]:
 
 
 ### KNN
@@ -298,7 +298,7 @@ print('Precision : %.3f (%.3f)' % (mean(scores2), std(scores2)))
 print('Recall : %.3f (%.3f)' % (mean(scores3), std(scores3)))
 
 
-# In[31]:
+# In[46]:
 
 
 ### Naive Bayes
