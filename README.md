@@ -5,6 +5,3 @@ In addition, I will apply three different feature selection methods (Filter, Wra
 
 Dataset
 https://www.census.gov/data/datasets/time-series/demo/cps/cps-asec.html
-
-GitHub
-SSAleya/CIND820_Census22 (github.com)
