@@ -1,0 +1,77 @@
+---
+title: "Forward Feature Selection"
+author: "Syeda Aleya"
+date: "15/10/2022"
+output: html_document
+---
+
+```{r}
+install.packages('FNN')
+install.packages('RCurl')
+install.packages('MASS')
+install.packages('leaps')
+library(MASS) # stepwise regression
+library(leaps) # all subsets regression
+
+```
+
+
+
+```{r}
+Census22_40 <- read.csv("C:/Users/sania/Data analytics/Course materials 820/Latest census/Initial Data analysis/Preparing Target Variable/Census22_2qt.csv")
+```
+
+
+
+```{r}
+full <- lm(Income~.,data=Census22_40)
+null <- lm(Income~1,data=Census22_40)
+stepF <- stepAIC(null, scope=list(lower=null, upper=full),
+direction= "forward", trace=TRUE)
+summary(stepF)
+
+```
+
+
+```{r}
+
+summary(stepF)
+
+```
+
+
+```{r}
+full <- lm(Income~.,data=Census22_40)
+lm(formula = Income ~ WKSWORK + A_HGA + A_AGE + A_SEX + A_WKSTAT + 
+    STATETAX_A + HHDREL + NOEMP + VET_YN + PRUNTYPE + PEMLR + 
+    A_MARITL + A_MJOCC + PRCITSHP + PRDISFLG + PARENT + HHDFMX + 
+    A_ENRLW + DIV_VAL + A_MJIND + ERN_OTR + PEHSPNON + CAP_VAL + 
+    A_CLSWKR + STATETAX_B + MIGSAME + MIG_MTR3 + PRDTRACE + PENATVTY, 
+    data = Census22_40)
+
+```
+
+
+
+
+```{r}
+# Removing "PRDTRACE" and "PENATVTY" since cofficient is not significant
+# Adding the target variable
+
+Census22_FS27 <- subset(Census22_40, select=c(WKSWORK, A_HGA, A_AGE, A_SEX, A_WKSTAT, 
+    STATETAX_A, HHDREL, NOEMP, VET_YN, PRUNTYPE, PEMLR,
+    A_MARITL, A_MJOCC, PRCITSHP, PRDISFLG, PARENT, HHDFMX, 
+    A_ENRLW, DIV_VAL, A_MJIND, ERN_OTR, PEHSPNON, CAP_VAL, 
+    A_CLSWKR, STATETAX_B, MIGSAME, MIG_MTR3, Income))
+
+```
+
+
+```{r}
+write.csv(Census22_FS27, "C:/Users/sania/Data analytics/Course materials 820/Latest census/Initial Data analysis/FS & BE/Census22_FS27.csv")
+```
+
+
+
+
+```
