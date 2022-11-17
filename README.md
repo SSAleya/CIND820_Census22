@@ -16,6 +16,6 @@ Contents of Repository:
 5. Classifiers on FS Methods: Technical reports of diffrent feature selection methods evaluation.
 6. Classifiers-top16: Technical reports of performance evaluation (top 16 attributes).
 7. CIND820 Big Data Analytics Project Report: Final project report
-
+8. Powerpoint Presentation: PowerPoint presentation of the project
 
 Tools used: Python (JupyterNotebook) and RStudio (rmarkdown)
